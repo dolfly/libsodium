@@ -183,6 +183,11 @@ pub fn build(b: *std.Build) !void {
 
     const enable_benchmarks = b.option(bool, "enable_benchmarks", "Whether tests should be benchmarks.") orelse false;
     const benchmarks_iterations = b.option(u32, "iterations", "Number of iterations for benchmarks.") orelse 200;
+    const wasm_freestanding_libc = b.option(
+        bool,
+        "wasm_freestanding_libc",
+        "Include the built-in libc compatibility layer for wasm32-freestanding.",
+    ) orelse true;
     var build_static = b.option(bool, "static", "Build libsodium as a static library.") orelse true;
     var build_shared = b.option(bool, "shared", "Build libsodium as a shared library.") orelse true;
 
@@ -265,7 +270,7 @@ pub fn build(b: *std.Build) !void {
             "-Werror=vla",
         };
 
-        if (wasm_freestanding) {
+        if (wasm_freestanding and wasm_freestanding_libc) {
             lib.root_module.addCSourceFiles(.{
                 .files = &.{wasm_libc_path ++ "/libc.c"},
                 .flags = flags,

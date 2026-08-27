@@ -78,6 +78,7 @@ jobs:
           zig build -Dtarget=x86_64-freebsd
           zig build -Dtarget=aarch64-freebsd
           zig build -Dtarget=wasm32-freestanding
+          zig build -Dtarget=wasm32-freestanding -Dwasm_freestanding_libc=false
           zig build -Doptimize=ReleaseFast
           rm -fr zig-cache zig-out
 
